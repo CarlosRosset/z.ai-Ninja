@@ -83,6 +83,14 @@ if [ "$(ls -A ./db 2>/dev/null)" ]; then
     DATABASE_URL=file:$BUILD_DIR/db/custom.db bun run db:push
     echo "✅ 数据库迁移完成"
     ls -lah $BUILD_DIR/db
+
+  
+  # 🌱 运行 seed 创建测试用户
+  echo ""
+  echo "🌱 运行数据库 seed 创建测试用户..."
+  DATABASE_URL=file:$BUILD_DIR/db/custom.db bun run prisma/seed.ts
+  echo "✅ Seed 完成！测试用户已创建"
+
 else
     echo "ℹ️  db 目录为空，跳过数据库迁移"
 fi
