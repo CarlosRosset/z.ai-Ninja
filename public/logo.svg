@@ -3,8 +3,9 @@
 	 viewBox="0 0 30 30" style="enable-background:new 0 0 30 30;" xml:space="preserve">
 <defs>
   <style type="text/css">
-    .st194{fill:#2D2D2D;stroke:#FFFFFF;stroke-width:0.6317;stroke-miterlimit:10;}
-    .st23{fill:#FFFFFF;}
+    /* Neon green contrast for fácil identificação visual */
+    .st194{fill:#0A0A0A;stroke:#39FF14;stroke-width:0.6317;stroke-miterlimit:10;}
+    .st23{fill:#39FF14;}
 
     .z-breathe {
       animation: breathe 2.5s ease-in-out infinite;

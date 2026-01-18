@@ -1,105 +1,119 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# 🚀 Bem-vindo ao Z.ai Code Scaffold
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+Um scaffold moderno e pronto para produção, impulsionado por tecnologias de
+ponta, feito para acelerar seu desenvolvimento com a assistência de código da
+[Z.ai](https://chat.z.ai).
 
-## ✨ Technology Stack
+## ✨ Stack de Tecnologia
 
-This scaffold provides a robust foundation built with:
+Este scaffold oferece uma base robusta construída com:
 
-### 🎯 Core Framework
-- **⚡ Next.js 15** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+### 🎯 Framework Central
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+- **⚡ Next.js 15** – Framework React para produção com App Router
+- **📘 TypeScript 5** – Tipagem para melhor DX
+- **🎨 Tailwind CSS 4** – Utilitários para UI rápida
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+### 🧩 Componentes & Estilo
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Fetch** - Promise-based HTTP request
+- **🧩 shadcn/ui** – Componentes acessíveis baseados em Radix UI
+- **🎯 Lucide React** – Ícones consistentes e bonitos
+- **🌈 Framer Motion** – Motion pronto para produção
+- **🎨 Next Themes** – Dark mode em poucas linhas
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+### 📋 Formulários & Validação
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
+- **🎣 React Hook Form** – Forms performáticos
+- **✅ Zod** – Validação first-class em TypeScript
 
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
+### 🔄 Estado & Dados
 
-## 🎯 Why This Scaffold?
+- **🐻 Zustand** – Gerência de estado simples e escalável
+- **🔄 TanStack Query** – Sincronização de dados potente
+- **🌐 Fetch** – HTTP com Promises
 
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
+### 🗄️ Banco & Backend
 
-## 🚀 Quick Start
+- **🗄️ Prisma** – ORM TypeScript de nova geração
+- **🔐 NextAuth.js** – Autenticação open source completa
+
+### 🎨 Recursos de UI Avançados
+
+- **📊 TanStack Table** – Tabelas headless com sorting/filtro/paginação
+- **🖱️ DND Kit** – Drag and drop moderno
+- **📊 Recharts** – Gráficos com React e D3
+- **🖼️ Sharp** – Processamento de imagem performático
+
+### 🌍 Internacionalização & Utilidades
+
+- **🌍 Next Intl** – i18n para Next.js
+- **📅 Date-fns** – Utilitários modernos de datas
+- **🪝 ReactUse** – Coleção de hooks úteis para React
+
+## 🎯 Por que este Scaffold?
+
+- **🏎️ Desenvolvimento Rápido** – Ferramentas e boas práticas pré-configuradas
+- **🎨 UI Bonita** – Biblioteca shadcn/ui completa com interações avançadas
+- **🔒 Tipagem Forte** – Configuração TS completa com Zod
+- **📱 Responsivo** – Mobile-first com animações suaves
+- **🗄️ Pronto para Banco** – Prisma configurado para backend rápido
+- **🔐 Auth Inclusa** – Fluxos seguros com NextAuth.js
+- **📊 Visualização de Dados** – Gráficos, tabelas e drag-and-drop
+- **🌍 Pronto para i18n** – Multi-idioma com Next Intl
+- **🚀 Pronto para Produção** – Build e deploy otimizados
+- **🤖 Amigável a AI** – Base estruturada para assistência inteligente
+
+## 🚀 Início Rápido
 
 ```bash
-# Install dependencies
+# Instalar dependências
 bun install
 
-# Start development server
+# Subir servidor de desenvolvimento
 bun run dev
 
-# Build for production
+# Build para produção
 bun run build
 
-# Start production server
+# Subir servidor de produção
 bun start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+Abra [http://localhost:3000](http://localhost:3000) para ver a aplicação
+rodando.
 
-## 🤖 Powered by Z.ai
+## 🤖 Impulsionado por Z.ai
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
+Este scaffold é otimizado para uso com a [Z.ai](https://chat.z.ai), sua
+assistente de código para:
 
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
+- **💻 Geração de Código** – Gere componentes, páginas e features
+  instantaneamente
+- **🎨 Desenvolvimento de UI** – Crie interfaces bonitas com auxílio de AI
+- **🔧 Correção de Bugs** – Identifique e corrija com sugestões inteligentes
+- **📝 Documentação** – Gere documentação completa
+- **🚀 Otimização** – Performance e melhores práticas
 
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
+Pronto para construir algo incrível? Comece em [chat.z.ai](https://chat.z.ai) e
+experimente o futuro do desenvolvimento assistido por AI!
 
-## 📁 Project Structure
+## 📁 Estrutura do Projeto
 
 ```
 src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+├── app/                 # Páginas do App Router (Next.js)
+├── components/          # Componentes React reutilizáveis
+│   └── ui/              # Componentes shadcn/ui
+├── hooks/               # Hooks React customizados
+└── lib/                 # Funções utilitárias e configurações
 ```
 
-## 🎨 Available Features & Components
+## 🎨 Recursos & Componentes Disponíveis
 
-This scaffold includes a comprehensive set of modern web development tools:
+Este scaffold inclui um conjunto abrangente de ferramentas modernas para web:
 
-### 🧩 UI Components (shadcn/ui)
+### 🧩 Componentes de UI (shadcn/ui)
+
 - **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
 - **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
 - **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
@@ -107,35 +121,40 @@ This scaffold includes a comprehensive set of modern web development tools:
 - **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
 - **Data Display**: Badge, Avatar, Calendar
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+### 📊 Recursos Avançados de Dados
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+- **Tables**: Tabelas poderosas com sort/filtro/paginação (TanStack Table)
+- **Charts**: Visualizações com Recharts
+- **Forms**: Formulários tipados com React Hook Form + Zod
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Fetch + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+### 🎨 Recursos Interativos
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+- **Animations**: Micro-interações suaves com Framer Motion
+- **Drag & Drop**: Drag and drop moderno com DND Kit
+- **Theme Switching**: Suporte dark/light embutido
 
-## 🤝 Get Started with Z.ai
+### 🔐 Integração de Backend
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+- **Authentication**: Fluxos prontos com NextAuth.js
+- **Database**: Operações type-safe com Prisma
+- **API Client**: Requisições HTTP com Fetch + TanStack Query
+- **State Management**: Estado simples e escalável com Zustand
+
+### 🌍 Recursos de Produção
+
+- **Internationalization**: Suporte multi-idioma com Next Intl
+- **Image Optimization**: Processamento de imagem automático com Sharp
+- **Type Safety**: TypeScript + Zod fim a fim
+- **Essential Hooks**: 100+ hooks úteis via ReactUse
+
+## 🤝 Comece com a Z.ai
+
+1. **Clone este scaffold** para iniciar seu projeto
+2. **Acesse [chat.z.ai](https://chat.z.ai)** para usar a assistente de código
+3. **Comece a construir** com geração inteligente de código
+4. **Faça deploy com confiança** usando o setup pronto para produção
 
 ---
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+Construído com ❤️ para a comunidade de devs. Impulsionado pela
+[Z.ai](https://chat.z.ai) 🚀
