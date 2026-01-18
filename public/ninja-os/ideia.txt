@@ -1,0 +1,208 @@
+# POC: Ninja OS
+
+Ninja OS — interface Mac-like que unifica atalhos e apps Ninja em um desktop responsivo acessível pelo navegador.
+
+---
+
+**Visão geral:**
+Ninja OS é um desktop Mac-like rodando no navegador; cada app é uma janela contêiner que carrega uma rota/página específica (via iframe ou conteúdo interno), aberta a partir da doca inferior e com os mesmos controles padrão (fechar, minimizar, maximizar).
+
+**Glossário essencial:**
+- **Ninja OS (SO web):** Interface desktop estilo macOS executada no navegador. Oferece barra superior, doca inferior e janelas.
+- **App Ninja:** Aplicação/página carregada dentro de uma janela do Ninja OS. 99% dos casos são apps internos; excepcionalmente pode haver visualizações externas via iframe/contêiner, mas é raro.
+- **Janela padrão:** Contêiner visual com header (botões fechar/minimizar/maximizar) e área de conteúdo onde o app é renderizado. Ao maximizar, deve respeitar a barra superior (encostar no topo sem sobrepor). "Always on top" só seria considerado se respeitar a barra fosse tecnicamente impossível.
+- **Doca (dock):** Barra inferior com ícones de apps. Clicar em um ícone abre/ativa a janela correspondente; indicadores visuais mostram quais apps estão abertos, mesmo ocultos, já que só há um foco ativo por vez.
+- **Barra de menu (topo):** Mostra status e ações globais (tema, relógio, usuário). Não é por app; é do sistema.
+- **Controle de janelas:** Botões circulares (vermelho, amarelo, verde) com comportamento consistente em todos os apps.
+- **Rotas/iframes:** Forma como o app é carregado no contêiner. Apps rodam em mesmo domínio/subdomínio (redirecionamento); se houver bloqueio, contorna-se sem "gambiarras", respeitando as políticas corretas.
+- **Estado (focus/minimize/maximize):** Cada janela segue o padrão de foco, minimizar, maximizar. Apenas uma janela fica focada; a focada define o app exibido na barra superior, mas outras podem permanecer abertas/executando em segundo plano.
+
+---
+
+## Barra de menu superior (menu/topo)
+
+Descrição enxuta da barra superior (menu/topo) do Ninja OS:
+
+- **Funções principais:**
+  - Alternar tema: claro | automático (segue sistema) | escuro.
+  - Relógio: hora atual em formato HH:MM.
+  - Usuário logado: avatar + menu de conta (trocar senha, sair).
+  - App em foco: exibe o nome do app da janela ativa (ajuda a saber o contexto atual).
+
+- **Comportamento esperado:**
+  - Padrão global (não muda por app).
+  - Sempre visível e estável no topo.
+  - Rótulos/idioma: PT-BR em todos os elementos.
+  - Acesso rápido: clique simples para trocar tema, abrir menu do usuário e identificar o app em uso.
+
+---
+
+## Doca (dock) — barra inferior de apps
+
+Barra fixa no rodapé (centrada) com ícones de apps. Fundo translúcido, borda sutil e sombra ao estilo macOS.
+
+- **Interação dos ícones:**
+  - Clique simples abre/mostra a janela do app.
+  - Se a janela estiver minimizada, o clique restaura; se já estiver visível, apenas traz foco.
+  - Ícone "running" exibe ponto indicador sob o app ativo.
+  - Hover eleva e amplia o ícone (efeito bounce/zoom).
+- **Comportamento visual:**
+  - Ícones com cantos arredondados e gradiente.
+  - Animação de escala/elevação no hover; fica centralizado no viewport.
+  - Z-index alto para ficar sobre o fundo, mas abaixo da barra superior.
+- **Estado/foco:**
+  - A janela aberta recebe `focused`; a doca não muda o nome do app no topo, mas aciona a janela que define o app em foco.
+  - Minimizar/remove `focused`; restaurar refoca.
+- **Padrão de idioma/rotulagem:**
+  - Títulos/`title` dos ícones em PT-BR.
+
+---
+
+## Janela padrão
+
+- **O que é:** Contêiner visual com header (botões fechar/vermelho, minimizar/amarelo, maximizar/verde) e área de conteúdo onde o app é renderizado.
+- **Controles e estados:**
+  - `visible` mostra a janela; `focused` traz para frente; `minimized` recolhe; `maximized` expande.
+  - Botões usam o padrão macOS e devem permanecer clicáveis em todos os estados.
+- **Layout e limites:**
+  - Posição central por padrão; ao maximizar, ocupa largura total e altura até o topo da viewport, **respeitando a barra superior (menu/topo)** para que os botões fiquem acessíveis e não fiquem ocultos por trás do menu.
+  - Header fixa altura e mantém título + caminho (breadcrumb) do app.
+- **Experiência consistente:**
+  - Idioma PT-BR em rótulos e mensagens.
+  - Foco/ordem z-index compartilhados entre janelas; a janela focada define o app exibido na barra superior.
+
+---
+
+## Apps Disponíveis
+
+### Torre de Controle
+- **Ícone:** 🧭
+- **Nível mínimo:** 2 (Usuário)
+- **Descrição:** Centraliza operação, rotas e ferramentas em um único lugar. Exibe favoritos e atalhos para serviços externos.
+
+### Gerenciador de Disco RAM
+- **Ícone:** 🥷
+- **Nível mínimo:** 3 (Gestor)
+- **Descrição:** Permite montar/desmontar disco RAM temporário para builds e operações voláteis.
+
+### Configurações do Sistema
+- **Ícone:** ⚙️
+- **Nível mínimo:** 2 (Usuário)
+- **Descrição:** Preferências e personalização do sistema, incluindo tema e opções de interface.
+
+---
+
+## Em desenvolvimento futuro - Backlog
+
+### Autenticação e Permissões
+
+#### Concluído:
+1. Login e validação: ler `users.json`, validar email+senha (md5), carregar nível e usuário corrente.
+2. Persistência/localStorage: salvar usuário logado (`ninja_current_user`), cache opcional de usuários e restauração automática da sessão no boot.
+3. Controle de acesso por nível: visitante (1) só visualiza; nível 2 apps de usuário; nível 3 todos os apps.
+
+#### Pendente:
+4. Cadastro básico: formulário mínimo (nome, email, telefone, senha) gerando nível 2; salvar no localStorage.
+
+#### Contrato de usuários (referência):
+```typescript
+{
+  nome: string;      // Pelo menos 2 nomes
+  avatar: string;    // URL de imagem
+  email: string;     // Com validação de email
+  telefone: string;  // Padrão de apenas números
+  senha_md5: string; // Hash MD5 simples da senha
+  nivel: number;     // 1=visitante, 2=usuário, 3=gestor
+}
+```
+
+### Funcionalidades Planejadas
+
+1. **Persistência no Banco de Dados**
+   - Migrar usuários do JSON para Prisma/SQLite
+   - Implementar CRUD completo de usuários
+   - Adicionar timestamps de criação/atualização
+
+2. **Gerenciamento de Favoritos**
+   - CRUD de favoritos via API
+   - Organização por categorias/pastas
+   - Filtros avançados e busca
+
+3. **Apps Adicionais**
+   - Terminal Web (execução de comandos)
+   - Gerenciador de Arquivos (visualização básica)
+   - Dashboard de Monitoramento (gráficos em tempo real)
+   - Gerenciador de Logs (filtro e busca)
+
+4. **Melhorias de UX**
+   - Drag-and-drop de janelas
+   - Redimensionamento de janelas
+   - Atalhos de teclado (Cmd+W para fechar, etc.)
+   - Animações suaves de transição
+   - Modo tela cheia
+
+5. **Integração com Serviços Reais**
+   - API para Cockpit (monitoramento)
+   - API para Portainer (containers)
+   - Webhook para notificações
+   - WebSocket para atualizações em tempo real
+
+---
+
+## Arquitetura Técnica (Next.js)
+
+### Frontend
+- **Framework:** Next.js 15 com App Router
+- **UI Components:** shadcn/ui (Radix UI + Tailwind CSS)
+- **State Management:** Zustand + React hooks
+- **Temas:** next-themes (dark/light/auto)
+- **Animações:** Framer Motion
+- **Ícones:** Lucide React
+
+### Backend
+- **API:** Next.js API Routes
+- **Banco de Dados:** SQLite via Prisma ORM
+- **Autenticação:** NextAuth.js (planejado)
+- **Validação:** Zod
+
+### Estrutura de Pastas
+
+```
+my-project/
+├── public/
+│   └── ninja-os/
+│       ├── data/
+│       │   ├── apps.json
+│       │   ├── favorites.json
+│       │   ├── users.json
+│       │   └── img/
+│       ├── AGENTS.md
+│       └── ideia.txt
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── ninja-os/
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── ninja-os/
+│   │   └── ui/
+│   ├── hooks/
+│   │   └── ninja-os/
+│   └── lib/
+│       └── db.ts
+├── prisma/
+│   └── schema.prisma
+└── worklog.md
+```
+
+---
+
+## Próximos Passos
+
+1. ✅ Estrutura inicial de arquivos JSON configurada
+2. 🔄 Implementação da interface principal em React
+3. ⏳ Migração de componentes HTML para React/Next.js
+4. ⏳ Criação de APIs para gerenciamento de usuários
+5. ⏳ Implementação de autenticação robusta
+6. ⏳ Adição de novos apps e funcionalidades
+7. ⏳ Testes e otimização de performance

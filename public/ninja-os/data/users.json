@@ -1,0 +1,26 @@
+[
+  {
+    "nome": "Carlos Rosset",
+    "avatar": "https://github.com/CarlosRosset.png?size=200",
+    "email": "carlosrosset@gmail.com",
+    "telefone": "82996007390",
+    "senha_md5": "827ccb0eea8a706c4c34a16891f84e7b",
+    "nivel": 3
+  },
+  {
+    "nome": "Ninja Usuário",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/4712/4712076.png",
+    "email": "ninja@os.com",
+    "telefone": "11999999999",
+    "senha_md5": "81dc9bdb52d04dc20036dbd8313ed055",
+    "nivel": 2
+  },
+  {
+    "nome": "Visitante",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/9131/9131529.png",
+    "email": "visitante@os.com",
+    "telefone": "11999999998",
+    "senha_md5": "202cb962ac59075b964b07152d234b70",
+    "nivel": 1
+  }
+]

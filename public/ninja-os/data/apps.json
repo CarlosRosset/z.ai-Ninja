@@ -1,0 +1,32 @@
+[
+  {
+    "id": "tower",
+    "titulo": "Torre de Controle",
+    "descricao": "Operação, rotas e ferramentas — tudo em um só lugar",
+    "img": "/ninja-os/data/img/control-tower.png",
+    "window_id": "win-tower",
+    "dock_id": "icon-tower",
+    "nivel_minimo": 2,
+    "categoria": "gestao"
+  },
+  {
+    "id": "ram",
+    "titulo": "Gerenciador de Disco RAM",
+    "descricao": "Edição Ninja Expert v6.1",
+    "img": "/ninja-os/data/img/ram-chip.png",
+    "window_id": "win-ram",
+    "dock_id": "icon-ram",
+    "nivel_minimo": 3,
+    "categoria": "infra"
+  },
+  {
+    "id": "settings",
+    "titulo": "Configurações do Sistema",
+    "descricao": "Preferências e personalização",
+    "img": "/ninja-os/data/img/settings-gear.svg",
+    "window_id": "win-settings",
+    "dock_id": "icon-settings",
+    "nivel_minimo": 2,
+    "categoria": "sistema"
+  }
+]

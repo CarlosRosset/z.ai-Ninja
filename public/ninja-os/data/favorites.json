@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Node.js Production",
+    "img": "/ninja-os/data/img/nodejs-logo.svg",
+    "desc": "Ambiente de produção Next.js hospedado. Roteia tráfego web público via Traefik (Porta 443) com certificado SSL automático. Atende requisições da aplicação principal.",
+    "link": "https://carlosrosset.dev"
+  },
+  {
+    "title": "Gestão de Containers (Portainer)",
+    "img": "/ninja-os/data/img/portainer-logo.svg",
+    "desc": "Painel administrativo centralizado. Permite criar, gerir e monitorar todos os serviços Docker (Stacks, Containers, Imagens e Redes) via interface web visual. Substitui comandos complexos de terminal para operações cotidianas.",
+    "link": "https://portainer.carlosrosset.dev"
+  },
+  {
+    "title": "Monitoramento de Servidor (Cockpit)",
+    "img": "/ninja-os/data/img/cockpit-logo.png",
+    "desc": "Dashboard operacional do Sistema (OS). Fornece visualização em tempo real de CPU, Memória, Disco e Logs de sistema. Permite gestão de usuários, serviços e terminal web para administração emergencial sem SSH.",
+    "link": "https://cockpit.carlosrosset.dev"
+  },
+  {
+    "title": "Gerenciamento de Infraestrutura (Hostinger)",
+    "img": "/ninja-os/data/img/hostinger-logo.svg",
+    "desc": "Painel oficial do provedor VPS. Gerencia recursos de hardware (vCPU, RAM), reconfiguração de Sistema Operacional (Snapshots/Reinstalação) e gestão financeira (Faturas, Renovação de Contratos). Acesso de nível 'root' para alterações profundas.",
+    "link": "https://hpanel.hostinger.com/vps/"
+  }
+]

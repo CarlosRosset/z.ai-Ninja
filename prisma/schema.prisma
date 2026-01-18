@@ -1,8 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Ninja OS MVP Schema
+// Banco: SQLite (dev) -> Postgres (produção)
+// ORM: Prisma
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +11,93 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// RBAC Roles
+enum UserRole {
+  VISITOR  // 0 - visitante/demo
+  USER     // 1 - usuário (read)
+  MANAGER  // 2 - gestor (ações)
+  ADMIN    // 3 - admin (CRUD usuários)
+  SUPERADMIN // 4 - superadmin (tudo)
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  name      String?
+  name      String
+  password  String   // bcrypt hash
+  role      UserRole @default(VISITOR)
+  avatar    String?
+  phone     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relações
+  refreshTokens RefreshToken[]
+  favorites  Favorite[]
+  auditLogs  AuditLog[]
+
+  @@index([email])
+  @@index([role])
 }
 
-model Post {
+// Refresh token para rotação de access token
+model RefreshToken {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  token     String   @unique // hash do refresh token
+  userId    String
+  expiresAt DateTime
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  // Relações
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// Favoritos por usuário
+model Favorite {
+  id          String   @id @default(cuid())
+  title       String
+  link        String
+  description String
+  image       String?
+  category    String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relações
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([category])
+}
+
+// Auditoria mínima
+enum AuditAction {
+  LOGIN
+  LOGOUT
+  REGISTER
+  CREATE_FAVORITE
+  UPDATE_FAVORITE
+  DELETE_FAVORITE
+}
+
+model AuditLog {
+  id        String      @id @default(cuid())
+  action    AuditAction
+  userId    String?
+  ipAddress String?
+  userAgent String?
+  details   String?    // JSON string para detalhes adicionais
+  createdAt DateTime    @default(now())
+
+  // Relações
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
