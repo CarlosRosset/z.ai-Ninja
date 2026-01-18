@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { verifyPassword, hashPassword, verifyAccessToken } from '@/lib/auth'
+import { verifyPassword, hashPassword, verifyToken } from '@/lib/auth'
 import { createAuditLog, getClientIp, getClientUserAgent } from '@/lib/audit'
 
 const prisma = new PrismaClient()
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     const accessToken = authHeader.substring(7)
-    const payload = verifyAccessToken(accessToken)
+    const payload = verifyToken(accessToken)
 
     if (!payload || !payload.userId) {
       return NextResponse.json(

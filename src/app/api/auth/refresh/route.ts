@@ -63,8 +63,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Gerar novo access token
-    const newAccessToken = generateAccessToken(payload)
+    // Gerar novo access token (payload limpo sem exp)
+    const { exp, iat, ...payloadForAccessToken } = payload
+    const newAccessToken = generateAccessToken(payloadForAccessToken)
 
     return NextResponse.json({
       ok: true,
