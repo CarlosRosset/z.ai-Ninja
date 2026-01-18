@@ -86,12 +86,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Set cookie HttpOnly, Secure em produção, SameSite Strict
+    // Set cookie HttpOnly, Secure em produção, SameSite Lax
     const isProduction = process.env.NODE_ENV === 'production'
     response.cookies.set('refreshToken', refreshToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'strict',
+      sameSite: 'lax',
       expires: refreshTokenExpiry,
       path: '/',
     })
