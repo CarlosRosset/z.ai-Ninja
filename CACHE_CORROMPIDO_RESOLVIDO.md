@@ -1,55 +1,90 @@
-# Cache Corrompido - Erro Cannot find module './447.js'
+# 🔧 Resolvendo Erros 404 - Cache Corrompido
 
-## 🚨 Erro
+## 🚨 Problema
+
 ```
-Error: Cannot find module './447.js'
-Require stack:
-- .next/server/webpack-runtime.js
-- .next/server/app/page.js
-...
+/_next/static/chunks/main-app.js?v=1768774051893:1 404 (Not Found)
+/_next/static/chunks/app-pages-internals.js:1 404 (Not Found)
+/_next/static/chunks/app/layout.js:1 404 (Not Found)
+/_next/static/css/app/layout.css?v=1768774051893:1 404 (Not Found)
 ```
 
 ## 📋 Causa
-O cache `.next/` do Next.js estava corrompido novamente, causando erro ao carregar módulos.
 
-Isso acontece por:
-- Múltiplas alterações sem rebuild completo
-- Hot Module Reload (HMR) inconsistente
-- Reinícios frequentes do servidor
-- Mudanças de dependências ou banco de dados
+O cache do Next.js (`.next`) estava corrompido/desincronizado, causando:
+- Navegador tentando carregar recursos inexistentes
+- Version mismatch entre build e runtime
+- Arquivos estáticos não encontrados
 
 ---
 
 ## ✅ Solução Aplicada
 
-### Passo 1: Parar Servidor
+### 1. Limpar Cache do Next.js
 ```bash
 pkill -f "next-server"
-pkill -f "bun run dev"
-```
-
-### Passo 2: Limpar Cache
-```bash
 rm -rf /home/z/my-project/.next
 ```
 
-### Passo 3: Reiniciar Servidor
+### 2. Reiniciar Servidor
 ```bash
 bun run dev > /home/z/my-project/dev.log 2>&1 &
 ```
 
-### Passo 4: Verificar Funcionamento
-```bash
-# Esperar servidor iniciar
-sleep 15
-
-# Testar login
-curl -X POST http://localhost:81/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@ninja.local","password":"admin123"}'
-
-# Resultado: ✅ 200 OK
+### 3. Servidor Reiniciado com Sucesso
 ```
+✓ Ready in 1224ms
+Status: Rodando (http://localhost:3000)
+```
+
+---
+
+## 🧪 Como Testar
+
+### Localmente (http://localhost:81):
+```bash
+# Testa endpoint de debug
+curl -s http://localhost:81/api/debug
+
+# Resultado: ✅ OK
+# userCount: 3
+```
+
+### No Navegador (Preview URL):
+
+#### Passo 1: LIMPAR CACHE DO NAVEGADOR
+
+**Chrome/Edge:**
+- `Ctrl + Shift + R` (Recarregar ignorando cache)
+- Ou `F12` → Network → Desmarcar "Disable cache"
+- Recarregar página
+
+**Firefox:**
+- `Ctrl + Shift + R` (Recarregar ignorando cache)
+- Ou `Ctrl + F5` (Recarregar forçado)
+
+**Safari (iOS/Mac):**
+- `Cmd + Shift + R` (Recarregar ignorando cache)
+- Ou `Cmd + Option + R`
+
+#### Passo 2: Limpar Cookies
+
+1. Pressione `F12` para abrir DevTools
+2. Vá para **Application** → **Cookies**
+3. Selecione `preview-chat-*.space.z.ai`
+4. Clique com botão direito → **Clear**
+5. Recarregue a página
+
+#### Passo 3: Testar
+
+```javascript
+// No console do navegador (F12):
+fetch('https://preview-chat-d4e8795e-c675-4222-824a-845253893d8f.space.z.ai/api/debug')
+  .then(r => r.json())
+  .then(d => console.log('Debug:', d))
+```
+
+**Esperado**: `userCount: 3` (ou mais)
 
 ---
 
@@ -58,46 +93,17 @@ curl -X POST http://localhost:81/api/auth/login \
 | Componente | Status |
 |-----------|--------|
 | Servidor Next.js | ✅ Rodando |
-| Porta 3000 | ✅ Ativa |
-| Porta 81 (gateway) | ✅ Ativa |
 | Cache .next | ✅ Limpo |
-| Banco de dados | ✅ Seedado |
-| Usuários | ✅ Criados (2) |
-| Login local | ✅ Funcionando |
-
----
-
-## 🧪 Como Testar
-
-### Via cURL:
-```bash
-curl -X POST http://localhost:81/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@ninja.local","password":"admin123"}'
-```
-
-### Via Console do Navegador:
-```javascript
-fetch('http://localhost:81/api/auth/login', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email: 'admin@ninja.local', password: 'admin123' })
-})
-  .then(r => r.json())
-  .then(d => console.log('Login:', d))
-```
-
-### Via Navegador:
-1. Abrir http://localhost:81
-2. Usar credenciais:
-   - Email: admin@ninja.local
-   - Senha: admin123
+| Banco de dados | ✅ Conectado (3 usuários) |
+| APIs locais | ✅ Funcionando |
+| Preview URL | ⏳ Aguardando limpeza de cache do navegador |
 
 ---
 
 ## 🔄 Como Evitar no Futuro
 
-### Opção 1: Script de Limpeza
+### Limpeza Automática
+
 Criar script `clean.sh`:
 ```bash
 #!/bin/bash
@@ -106,18 +112,14 @@ rm -rf .next
 bun run dev > dev.log 2>&1 &
 ```
 
-### Opção 2: Limpeza Automática
-Adicionar ao `package.json`:
-```json
-{
-  "scripts": {
-    "clean": "pkill -f next-server && rm -rf .next && bun run dev"
-  }
-}
-```
+### Detectar Erros de Cache
 
-### Opção 3: Limpeza Manual
-Sempre que tiver erro de módulo:
+Sempre que ver estes erros:
+- `Cannot find module './xxx.js'`
+- Recursos estáticos 404
+- Erros estranhos de webpack
+
+Execute:
 ```bash
 pkill -f "next-server"
 rm -rf .next
@@ -128,50 +130,61 @@ bun run dev
 
 ## 📝 Resumo
 
-| Problema | Solução | Status |
-|---------|---------|--------|
-| Cache corrompido | rm -rf .next | ✅ Aplicado |
-| Erro de módulo | Rebuild automático | ✅ Resolvido |
-| Servidor parado | Reiniciar bun dev | ✅ Rodando |
-| Login local | Testar via curl | ✅ Funcionando |
+| Problema | Causa | Solução | Status |
+|---------|--------|---------|--------|
+| 404 em chunks | Cache corrompido | Limpar .next | ✅ Aplicado |
+| Recursos não encontrados | Build desincronizado | Rebuild automático | ✅ Funcionando |
+| Navegador cacheado | Version mismatch | Limpar cache navegador | ⏳ Usuário precisa fazer |
 
 ---
 
-## ⏭️ Próximo Deploy
+## 🎯 Próximos Passos
 
-Quando fazer o próximo deploy:
-1. ✅ build.sh agora roda seed automaticamente
-2. ✅ Usuários serão criados em produção
-3. ✅ Login funcionará em ninja-os.space.z.ai
-4. ⚠️ Se cache corromper novamente, seguir passos acima
-
----
-
-## 💡 Dicas
-
-### Quando limpar cache:
-- Erros "Cannot find module ./xxx.js"
-- Erros estranhos de webpack
-- Diferentes comportamentos em diferentes portas
-- Build falha sem motivo claro
-
-### Quando NÃO limpar cache:
-- Erros lógicos de código
-- Erros de banco de dados
-- Erros de validação
-- Problemas de autenticação (reais)
+1. ⏳ Usuário limpa cache do navegador (Ctrl+Shift+R)
+2. ⏳ Testa preview URL novamente
+3. ⏳ Verifica se carrega sem erros 404
+4. ⏳ Testa login no preview URL
+5. ⏳ Testa login no domínio público após deploy
 
 ---
 
-## 🎯 Conclusão
+## ✅ Comandos Úteis
 
-O erro de cache corrompido é comum em desenvolvimento. A solução é sempre:
-1. Parar servidor
-2. Limpar .next
-3. Reiniciar
+### Verificar Logs
+```bash
+tail -f /home/z/my-project/dev.log
+```
 
-O servidor está agora 100% funcional com:
-- ✅ Cache limpo
-- ✅ Usuários criados
+### Limpar e Reiniciar
+```bash
+pkill -f "next-server"
+rm -rf .next
+bun run dev
+```
+
+### Testar APIs
+```bash
+# Testa login
+curl -X POST http://localhost:81/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@ninja.local","password":"admin123"}'
+
+# Testa debug
+curl -s http://localhost:81/api/debug
+```
+
+---
+
+## 🎉 Conclusão
+
+O servidor está funcionando 100% após limpar o cache:
+- ✅ Next.js rodando
 - ✅ APIs operacionais
-- ✅ Login funcionando localmente
+- ✅ Banco de dados conectado
+- ✅ 3 usuários criados
+
+**Ação necessária do usuário:**
+- Limpar cache do navegador (Ctrl+Shift+R)
+- Recarregar a página
+
+Após isso, o preview URL deve funcionar perfeitamente!
