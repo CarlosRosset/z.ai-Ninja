@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
+import { Moon, Sun } from 'lucide-react'
 import { useNinjaOSStore, authenticatedFetch } from '@/stores/ninja-os'
 import ControlTower from '@/components/ninja-os/ControlTower'
 import RamManager from '@/components/ninja-os/RamManager'
@@ -750,29 +751,31 @@ export default function NinjaOS() {
         <div className="flex items-center gap-4">
           {showThemeSwitcher && (
             <div className={`flex gap-1 p-0.5 rounded-md ${
-              theme === 'dark' ? 'bg-black/20' : 'bg-slate-200'
+              theme === 'dark' ? 'bg-black/30' : 'bg-slate-200'
             }`}>
               <button
                 onClick={() => toggleTheme('dark')}
-                className={`px-2 py-0.5 text-xs rounded flex items-center justify-center ${
+                className={`px-2 py-0.5 text-xs rounded flex items-center justify-center transition-colors ${
                   theme === 'dark'
-                    ? 'bg-blue-500/30 text-blue-400'
-                    : 'hover:bg-slate-300 hover:text-foreground text-muted-foreground'
+                    ? 'bg-blue-500/40 text-white ring-1 ring-inset ring-blue-300/70 shadow-sm'
+                    : 'hover:bg-slate-300 hover:text-foreground text-slate-600'
                 }`}
                 title="Escuro"
+                aria-pressed={theme === 'dark'}
               >
-                🌑
+                <Moon className="w-4 h-4" aria-hidden="true" />
               </button>
               <button
                 onClick={() => toggleTheme('light')}
-                className={`px-2 py-0.5 text-xs rounded flex items-center justify-center ${
+                className={`px-2 py-0.5 text-xs rounded flex items-center justify-center transition-colors ${
                   theme === 'light'
-                    ? 'bg-blue-500/30 text-blue-400'
-                    : 'hover:bg-slate-300 hover:text-foreground text-muted-foreground'
+                    ? 'bg-blue-500/40 text-blue-900 ring-1 ring-inset ring-blue-300/70 shadow-sm'
+                    : 'hover:bg-slate-300 hover:text-foreground text-slate-600'
                 }`}
                 title="Claro"
+                aria-pressed={theme === 'light'}
               >
-                🌕
+                <Sun className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
           )}
