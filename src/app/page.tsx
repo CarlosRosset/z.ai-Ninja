@@ -188,6 +188,21 @@ export default function NinjaOS() {
   const apps = STATIC_APPS
 
   // Window management
+  const updateFocusedAppFromWindows = (list: Window[]) => {
+    const visibleWindows = [...list]
+      .filter(w => w.visible && !w.minimized)
+      .sort((a, b) => b.zIndex - a.zIndex)
+
+    const nextFocused = visibleWindows[0]
+    if (!nextFocused) {
+      setFocusedApp('Início')
+      return
+    }
+
+    const app = apps.find(a => a.id === nextFocused.appId)
+    setFocusedApp(app?.titulo ?? 'Início')
+  }
+
   const openWindow = (app: App) => {
     const userRole = user?.role || 0
     if (userRole < app.nivelMinimo) {
@@ -224,27 +239,23 @@ export default function NinjaOS() {
   }
 
   const closeWindow = (windowId: string) => {
-    setWindows(prev => prev.filter(w => w.id !== windowId))
-    // Atualizar focusedApp se fechou a janela focada
-    const remainingWindows = windows.filter(w => w.id !== windowId)
-    if (remainingWindows.length === 0) {
-      setFocusedApp('Início')
-    }
+    setWindows(prev => {
+      const next = prev.filter(w => w.id !== windowId)
+      updateFocusedAppFromWindows(next)
+      return next
+    })
   }
 
   const minimizeWindow = (windowId: string) => {
-    setWindows(prev =>
-      prev.map(w =>
+    setWindows(prev => {
+      const next = prev.map(w =>
         w.id === windowId
           ? { ...w, minimized: true, focused: false }
           : w
       )
-    )
-    // Atualizar focusedApp
-    const remainingFocused = windows.filter(w => w.id !== windowId && w.focused)
-    if (remainingFocused.length === 0) {
-      setFocusedApp('Início')
-    }
+      updateFocusedAppFromWindows(next)
+      return next
+    })
   }
 
   const toggleMaximize = (windowId: string) => {
@@ -269,21 +280,15 @@ export default function NinjaOS() {
 
   const focusWindow = (windowId: string) => {
     setZIndexCounter(c => c + 1)
-    setWindows(prev =>
-      prev.map(w =>
+    setWindows(prev => {
+      const next = prev.map(w =>
         w.id === windowId
           ? { ...w, minimized: false, focused: true, zIndex: zIndexCounter + 1 }
           : { ...w, focused: false }
       )
-    )
-    // Atualizar focusedApp
-    const win = windows.find(w => w.id === windowId)
-    if (win) {
-      const app = apps.find(a => a.id === win.appId)
-      if (app) {
-        setFocusedApp(app.titulo)
-      }
-    }
+      updateFocusedAppFromWindows(next)
+      return next
+    })
   }
 
   const handleLogin = async () => {
@@ -908,7 +913,10 @@ export default function NinjaOS() {
           className={`fixed z-60 flex items-center justify-center ${
             appLauncherMaximized ? 'w-full top-8 left-0 right-0 bottom-0' : 'inset-0 p-8'
           }`}
-          onClick={() => setShowAppLauncher(false)}
+          onClick={() => {
+            setShowAppLauncher(false)
+            setFocusedApp('Início')
+          }}
         >
           {/* BASE - Fundo do modal - usando token 'base' do surface-tokens.ts */}
           <div
@@ -930,7 +938,10 @@ export default function NinjaOS() {
             }`}>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setShowAppLauncher(false)}
+                  onClick={() => {
+                    setShowAppLauncher(false)
+                    setFocusedApp('Início')
+                  }}
                   className="w-3 h-3 rounded-full bg-red-500 hover:opacity-80 transition-opacity"
                   title="Fechar"
                 />
