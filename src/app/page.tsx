@@ -911,14 +911,14 @@ export default function NinjaOS() {
               appLauncherMaximized
                 ? (theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-500/50')
                 : (theme === 'dark' ? 'border-slate-700' : 'border-slate-300')
-            }`}
+            } ${theme === 'dark' ? 'bg-slate-900' : 'bg-white'}`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* WindowChrome - IGUAL às janelas da Torre/RAM */}
             <div className={`h-10 border-b flex items-center px-4 justify-between shrink-0 ${
               theme === 'dark'
-                ? 'bg-slate-700 border-slate-600'
-                : 'bg-slate-100 border-slate-300'
+                ? 'bg-slate-800 border-slate-600'
+                : 'bg-slate-50 border-slate-200'
             }`}>
               <div className="flex gap-2">
                 <button
