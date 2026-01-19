@@ -1,7 +1,8 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { getTileTokens, Theme } from './surface-tokens'
+import { TILE_TOKENS, getTileTokens, Theme } from './surface-tokens'
 
 interface PageHeroProps {
   icon: string
@@ -18,9 +19,15 @@ interface PageHeroProps {
  * - Subtitle (accent color, monospace)
  */
 export default function PageHero({ icon, title, subtitle, theme: propTheme }: PageHeroProps) {
-  const { theme: currentTheme } = useTheme()
-  const theme = propTheme || (currentTheme as Theme)
-  const tileTokens = getTileTokens(theme)
+  const { theme: currentTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return null
+
+  const candidate = (propTheme || resolvedTheme || currentTheme || 'dark') as string
+  const theme = candidate === 'light' ? 'light' : 'dark'
+  const tileTokens = getTileTokens(theme) || TILE_TOKENS.dark
 
   return (
     <div className="flex items-center gap-4">

@@ -1,7 +1,8 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { getSurfaceTokens, Theme } from './surface-tokens'
+import { SURFACE_TOKENS, getSurfaceTokens, Theme } from './surface-tokens'
 
 interface SectionCardProps {
   children: React.ReactNode
@@ -24,9 +25,15 @@ export default function SectionCard({
   padding = 'md',
   theme: propTheme
 }: SectionCardProps) {
-  const { theme: currentTheme } = useTheme()
-  const theme = propTheme || (currentTheme as Theme)
-  const tokens = getSurfaceTokens(theme)
+  const { theme: currentTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return null
+
+  const candidate = (propTheme || resolvedTheme || currentTheme || 'dark') as string
+  const theme = candidate === 'light' ? 'light' : 'dark'
+  const tokens = getSurfaceTokens(theme) || SURFACE_TOKENS.dark
 
   const paddingMap = {
     xs: 'p-3',

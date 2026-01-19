@@ -73,9 +73,11 @@ const STATIC_APPS: App[] = [
 ]
 
 export default function NinjaOS() {
-  const { theme, setTheme } = useTheme()
+  const { theme: themeState, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [time, setTime] = useState('')
+
+  const theme = (themeState === 'light' || resolvedTheme === 'light') ? 'light' : 'dark'
 
   // Store
   const {
@@ -203,14 +205,14 @@ export default function NinjaOS() {
       }
 
       const newWindow: Window = {
-        id: `win-${Date.now()}`,
+        id: app.windowId,
         appId: app.id,
         title: app.titulo,
         visible: true,
         minimized: false,
         maximized: false,
         focused: true,
-        zIndex: zIndexCounter + 1
+        zIndex: Math.max(0, ...windows.map(w => w.zIndex)) + 1
       }
 
       return [...prev.map(w => ({ ...w, focused: false })), newWindow]
@@ -463,19 +465,11 @@ export default function NinjaOS() {
     }
   }
 
-  const toggleTheme = (newTheme: 'dark' | 'light' | 'auto') => {
+  const toggleTheme = (newTheme: 'dark' | 'light') => {
     setTheme(newTheme)
-    if (newTheme === 'auto') {
-      // Detecta a preferência do sistema
-      const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      toast.success('Tema alterado para Automático', {
-        description: `Seguindo preferência do sistema: ${isSystemDark ? 'Modo Escuro' : 'Modo Claro'}`,
-      })
-    } else {
-      toast.success(`Tema alterado para ${newTheme === 'dark' ? 'Escuro' : 'Claro'}`, {
-        description: 'O tema foi aplicado.',
-      })
-    }
+    toast.success(`Tema alterado para ${newTheme === 'dark' ? 'Escuro' : 'Claro'}`, {
+      description: 'O tema foi aplicado.',
+    })
   }
 
   if (!mounted) return null
@@ -485,8 +479,8 @@ export default function NinjaOS() {
     return (
       <div className={`min-h-screen flex items-center justify-center p-4 ${
         theme === 'dark'
-          ? 'bg-gradient-to-br from-slate-950 to-slate-900'
-          : 'bg-gradient-to-br from-slate-100 to-slate-200'
+          ? 'bg-linear-to-br from-slate-950 to-slate-900'
+          : 'bg-linear-to-br from-slate-100 to-slate-200'
       }`}>
         <div className={`w-full max-w-md backdrop-blur-xl border rounded-2xl p-8 ${
           theme === 'dark'
@@ -724,8 +718,8 @@ export default function NinjaOS() {
   return (
     <div className={`min-h-screen relative ${
       theme === 'dark'
-        ? 'bg-gradient-to-br from-slate-950 to-slate-900'
-        : 'bg-gradient-to-br from-slate-100 to-slate-200'
+        ? 'bg-linear-to-br from-slate-950 to-slate-900'
+        : 'bg-linear-to-br from-slate-100 to-slate-200'
     }`}>
       {/* Menu Bar */}
       <div className={`fixed top-0 left-0 right-0 h-8 backdrop-blur-md border-b flex items-center justify-between px-5 z-50 ${
@@ -763,17 +757,6 @@ export default function NinjaOS() {
                 title="Escuro"
               >
                 🌑
-              </button>
-              <button
-                onClick={() => toggleTheme('auto')}
-                className={`px-2 py-0.5 text-xs rounded flex items-center justify-center ${
-                  theme === 'auto'
-                    ? 'bg-blue-500/30 text-blue-400'
-                    : 'hover:bg-slate-300 hover:text-foreground text-muted-foreground'
-                }`}
-                title="Automático"
-              >
-                🌓
               </button>
               <button
                 onClick={() => toggleTheme('light')}
@@ -871,7 +854,7 @@ export default function NinjaOS() {
             onMouseDown={() => focusWindow(window.id)}
           >
             {/* Window Header */}
-            <div className={`h-10 border-b flex items-center px-4 justify-between flex-shrink-0 ${
+            <div className={`h-10 border-b flex items-center px-4 justify-between shrink-0 ${
               theme === 'dark'
                 ? 'bg-slate-700 border-slate-600'
                 : 'bg-slate-100 border-slate-300'
@@ -914,7 +897,7 @@ export default function NinjaOS() {
       {/* Application Launcher Modal */}
       {showAppLauncher && (
         <div
-          className={`fixed z-[60] flex items-center justify-center ${
+          className={`fixed z-60 flex items-center justify-center ${
             appLauncherMaximized ? 'w-full top-8 left-0 right-0 bottom-0' : 'inset-0 p-8'
           }`}
           onClick={() => setShowAppLauncher(false)}
@@ -925,8 +908,6 @@ export default function NinjaOS() {
             className={`backdrop-blur-xl border rounded-xl shadow-md transition-all duration-200 overflow-hidden flex flex-col ${
               appLauncherMaximized ? 'rounded-none w-full h-full' : 'max-w-4xl w-full max-h-[80vh]'
             } ${
-              theme === 'dark' ? 'bg-slate-900' : 'bg-white'
-            } ${
               appLauncherMaximized
                 ? (theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-500/50')
                 : (theme === 'dark' ? 'border-slate-700' : 'border-slate-300')
@@ -934,7 +915,7 @@ export default function NinjaOS() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* WindowChrome - IGUAL às janelas da Torre/RAM */}
-            <div className={`h-10 border-b flex items-center px-4 justify-between flex-shrink-0 ${
+            <div className={`h-10 border-b flex items-center px-4 justify-between shrink-0 ${
               theme === 'dark'
                 ? 'bg-slate-700 border-slate-600'
                 : 'bg-slate-100 border-slate-300'
@@ -981,7 +962,7 @@ export default function NinjaOS() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {apps.map((app) => {
                     const isRunning = windows.some(w => w.appId === app.id)
-                    const isDisabled = user && user.role < app.nivelMinimo
+                    const isDisabled = Boolean(user && user.role < app.nivelMinimo)
 
                     return (
                       <button
@@ -992,7 +973,7 @@ export default function NinjaOS() {
                             setShowAppLauncher(false)
                           }
                         }}
-                        disabled={isDisabled}
+                        disabled={!!isDisabled}
                         className={`
                           rounded-xl border-2 p-4 transition-all duration-200
                           ${isDisabled
@@ -1077,20 +1058,20 @@ export default function NinjaOS() {
       }`}>
         {apps.map(app => {
           const isRunning = windows.some(w => w.appId === app.id)
-          const isDisabled = user && user.role < app.nivelMinimo
+          const isDisabled = Boolean(user && user.role < app.nivelMinimo)
 
           return (
             <button
               key={app.id}
               onClick={() => openWindow(app)}
-              disabled={isDisabled}
+              disabled={!!isDisabled}
               className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-200 ${
                 isDisabled ? 'opacity-40 grayscale cursor-not-allowed' : 'hover:-translate-y-1 hover:scale-105 cursor-pointer'
               } border shadow-md relative ${
                 theme === 'dark'
-                  ? 'bg-gradient-to-br from-slate-700 to-slate-800 border-slate-600'
-                  : 'bg-gradient-to-br from-slate-100 to-slate-200 border-slate-300'
-              } ${isRunning ? 'after:content-[""] after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:w-2.5 after:h-2.5 after:rounded-full after:bg-green-500 after:shadow-[0_0_10px_rgba(34,197,94,0.7)]' : ''}`}
+                  ? 'bg-linear-to-br from-slate-700 to-slate-800 border-slate-600'
+                  : 'bg-linear-to-br from-slate-100 to-slate-200 border-slate-300'
+              } ${isRunning ? 'after:content-["" ] after:absolute after:bottom-[-4px] after:left-1/2 after:-translate-x-1/2 after:w-2.5 after:h-2.5 after:rounded-full after:bg-green-500 after:shadow-[0_0_10px_rgba(34,197,94,0.7)]' : ''}`}
               title={app.titulo}
             >
               <img src={app.img} alt={app.titulo} className="w-9 h-9 object-contain" />
