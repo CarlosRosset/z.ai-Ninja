@@ -46,4 +46,8 @@ dev.log
 test
 prompt
 
+# local db
+/db/custom.db
+/db/*.bak
+
 server.log
