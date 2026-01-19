@@ -15,6 +15,9 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
+import controlTowerImg from '../../public/ninja-os/data/img/control-tower.png'
+import ramChipImg from '../../public/ninja-os/data/img/ram-chip.png'
+import settingsGearSvg from '../../public/ninja-os/data/img/settings-gear.svg'
 
 interface App {
   id: string
@@ -44,7 +47,7 @@ const STATIC_APPS: App[] = [
     id: 'tower',
     titulo: 'Torre de Controle',
     descricao: 'Operação, rotas e ferramentas — tudo em um só lugar',
-    img: '/ninja-os/data/img/control-tower.png',
+    img: controlTowerImg.src,
     windowId: 'win-tower',
     dockId: 'icon-tower',
     nivelMinimo: 0,
@@ -54,7 +57,7 @@ const STATIC_APPS: App[] = [
     id: 'ram',
     titulo: 'Gerenciador de Disco RAM',
     descricao: 'Edição Ninja Expert v6.1',
-    img: '/ninja-os/data/img/ram-chip.png',
+    img: ramChipImg.src,
     windowId: 'win-ram',
     dockId: 'icon-ram',
     nivelMinimo: 3, // Admin only
@@ -64,7 +67,7 @@ const STATIC_APPS: App[] = [
     id: 'settings',
     titulo: 'Configurações do Sistema',
     descricao: 'Preferências e personalização',
-    img: '/ninja-os/data/img/settings-gear.svg',
+    img: settingsGearSvg.src,
     windowId: 'win-settings',
     dockId: 'icon-settings',
     nivelMinimo: 0,
@@ -298,8 +301,10 @@ export default function NinjaOS() {
     } else {
       setEmail('')
       setPassword('')
+      const currentUser = useNinjaOSStore.getState().user
+      const displayName = currentUser?.name || currentUser?.email || 'usuário'
       toast.success('Bem-vindo de volta!', {
-        description: `Login realizado com sucesso para ${user?.name}.`,
+        description: `Login realizado com sucesso para ${displayName}.`,
       })
     }
   }
@@ -994,7 +999,7 @@ export default function NinjaOS() {
                             ? 'bg-slate-800 border-slate-600'
                             : 'bg-slate-100 border-slate-200'
                         }`}>
-                          {app.img && app.img.startsWith('/ninja-os/data/img/') ? (
+                          {app.img ? (
                             <img src={app.img} alt={app.titulo} className="w-8 h-8 object-contain" />
                           ) : (
                             <span className="text-2xl">📱</span>
