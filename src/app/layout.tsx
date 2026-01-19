@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "sonner";
 import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
@@ -48,6 +49,8 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
+          {/* Toaster do sonner: usado pelos toasts (tema, auth) em page.tsx */}
+          <SonnerToaster position="top-center" richColors closeButton />
           <Toaster />
         </ThemeProvider>
       </body>
