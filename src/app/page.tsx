@@ -858,7 +858,9 @@ export default function NinjaOS() {
           <div
             key={window.id}
             className={`fixed backdrop-blur-xl border rounded-xl shadow-md transition-all duration-200 overflow-hidden flex flex-col ${
-              isMaximized ? 'top-8 left-0 right-0 bottom-0 rounded-none' : 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[640px]'
+              isMaximized
+                ? 'top-8 left-0 right-0 bottom-0 rounded-none'
+                : 'left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 max-w-[calc(100vw-32px)] max-h-[calc(100vh-120px)] w-[min(900px,calc(100vw-32px))] h-[min(640px,calc(100vh-160px))]'
             } ${window.minimized ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100'} ${
               theme === 'dark'
                 ? 'bg-slate-800'
