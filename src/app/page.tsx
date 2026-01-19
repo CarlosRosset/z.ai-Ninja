@@ -214,27 +214,32 @@ export default function NinjaOS() {
 
     setWindows(prev => {
       const existing = prev.find(w => w.appId === app.id)
+      let next: Window[]
+
       if (existing) {
         setZIndexCounter(c => c + 1)
-        return prev.map(w =>
+        next = prev.map(w =>
           w.id === existing.id
             ? { ...w, visible: true, minimized: false, focused: true, zIndex: zIndexCounter + 1 }
             : { ...w, focused: false }
         )
+      } else {
+        const newWindow: Window = {
+          id: app.windowId,
+          appId: app.id,
+          title: app.titulo,
+          visible: true,
+          minimized: false,
+          maximized: false,
+          focused: true,
+          zIndex: Math.max(0, ...prev.map(w => w.zIndex)) + 1
+        }
+
+        next = [...prev.map(w => ({ ...w, focused: false })), newWindow]
       }
 
-      const newWindow: Window = {
-        id: app.windowId,
-        appId: app.id,
-        title: app.titulo,
-        visible: true,
-        minimized: false,
-        maximized: false,
-        focused: true,
-        zIndex: Math.max(0, ...windows.map(w => w.zIndex)) + 1
-      }
-
-      return [...prev.map(w => ({ ...w, focused: false })), newWindow]
+      updateFocusedAppFromWindows(next)
+      return next
     })
   }
 
